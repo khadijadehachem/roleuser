@@ -19,10 +19,45 @@ class CreateUsersTable extends Migration
             $table->string('email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('Phone')->nullable();
+            $table->string('Cin')->nullable();
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->foreign('company_id')
+                ->references('id')
+                ->on('companies')
+                ->onDelete('restrict')
+                ->onUpdate('restrict');
+             $table->unsignedBigInteger('category_id')->nullable();
+            $table->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('restrict')
+                ->onUpdate('restrict');
+            $table->double('plafond')->nullable();;
+            
+            $table->boolean('active')->nullable()->default(true);
+
             $table->rememberToken();
             $table->timestamps();
 
             $table->softDeletes();
+
+            /*
+
+                -id :int
+- Name :String
+- Email :String
+- Phone :int
+- Photo :string
+- Cin :String
+- Password :String
+- company_id :int
+- category_id:int
+-active : boolean
+-plafond :float
+
+
+            */
 
 
         });

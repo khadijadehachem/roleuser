@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Manager;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Role;
-use App\Models\Company;
-
 use App\Models\User;
 
+use App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Traits\CsvImportTrait;
 use App\Http\Requests\MassDestroyUserRequest;
@@ -31,10 +30,12 @@ class UserController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-      
-        $users = User::all();
+        $user= auth()->user();
 
-        return view('admin.users.index', compact('users'));
+        $users = User::where('company_id',$user->company->id)->where('id', '!=', $user->id)->get();
+
+
+        return view('manager.employees.index', compact('users'));
     }
 
     public function create()
@@ -42,9 +43,8 @@ class UserController extends Controller
         abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $roles = Role::all()->pluck('title', 'id');
-        $companies = Company::all()->pluck('name', 'id');
 
-        return view('admin.users.create', compact('roles','companies'));
+        return view('manager.employees.create', compact('roles'));
     }
 
     public function store(StoreUserRequest $request)
@@ -52,7 +52,7 @@ class UserController extends Controller
         $user = User::create($request->all());
         $user->roles()->sync($request->input('roles', []));
 
-        return redirect()->route('admin.users.index');
+        return redirect()->route('manager.employees.index');
     }
 
     public function edit(User $user)
@@ -62,9 +62,8 @@ class UserController extends Controller
         $roles = Role::all()->pluck('title', 'id');
 
         $user->load('roles');
-        $companies = Company::all()->pluck('name', 'id');
 
-        return view('admin.users.edit', compact('roles', 'user','companies'));
+        return view('manager.employees.edit', compact('roles', 'user'));
     }
 
     public function update(UpdateUserRequest $request, User $user)
@@ -72,7 +71,7 @@ class UserController extends Controller
         $user->update($request->all());
         $user->roles()->sync($request->input('roles', []));
 
-        return redirect()->route('admin.users.index');
+        return redirect()->route('manager.employees.index');
     }
 
     public function show(User $user)
@@ -81,7 +80,7 @@ class UserController extends Controller
 
         $user->load('roles');
 
-        return view('admin.users.show', compact('user'));
+        return view('manager.employees.show', compact('user'));
     }
 
     public function destroy(User $user)

@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Employee;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Role;
-use App\Models\Company;
-
 use App\Models\User;
 
 
@@ -31,10 +29,9 @@ class UserController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-      
         $users = User::all();
 
-        return view('admin.users.index', compact('users'));
+        return view('manager.users.index', compact('users'));
     }
 
     public function create()
@@ -42,9 +39,8 @@ class UserController extends Controller
         abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $roles = Role::all()->pluck('title', 'id');
-        $companies = Company::all()->pluck('name', 'id');
 
-        return view('admin.users.create', compact('roles','companies'));
+        return view('admin.users.create', compact('roles'));
     }
 
     public function store(StoreUserRequest $request)
@@ -62,9 +58,8 @@ class UserController extends Controller
         $roles = Role::all()->pluck('title', 'id');
 
         $user->load('roles');
-        $companies = Company::all()->pluck('name', 'id');
 
-        return view('admin.users.edit', compact('roles', 'user','companies'));
+        return view('admin.users.edit', compact('roles', 'user'));
     }
 
     public function update(UpdateUserRequest $request, User $user)

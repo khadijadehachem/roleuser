@@ -4,8 +4,12 @@ use Illuminate\Support\Facades\Route;
 /*
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\UserController;*/
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Manager\CategoryController;*/
 
+
+
+//use App\Http\Controllers\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,10 +43,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Permissions
     Route::delete('permissions/destroy', 'PermissionController@massDestroy')->name('permissions.massDestroy');
     Route::resource('permissions', 'PermissionController');
+   // Route::resource('permissions', PermissionController::class);
 
     // Roles
     Route::delete('roles/destroy', 'RoleController@massDestroy')->name('roles.massDestroy');
     Route::resource('roles', 'RoleController');
+
+    // companies
+    Route::delete('companies/destroy', 'CompanyController@massDestroy')->name('companies.massDestroy');
+    Route::resource('companies', 'CompanyController');
 
     // Users
     Route::delete('users/destroy', 'UserController@massDestroy')->name('users.massDestroy');
@@ -60,6 +69,25 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 
     }
 });
 
+Route::group(['prefix' => 'manager', 'as' => 'manager.', 'namespace' => 'Manager', 'middleware' => ['auth', 'manager']], function () {
+    Route::get('/', 'HomeController@index')->name('home');
+    //category
+    Route::resource('categories', 'CategoryController');
+   // Route::delete('categories/destroy', 'CategoryController@massDestroy')->name('categories.massDestroy');
+    
+    //Route::resource('categories', CategoryController::class);
+    Route::delete('employees/destroy', 'UserController@massDestroy')->name('employees.massDestroy');
+    Route::post('users/parse-csv-import', 'UserController@parseCsvImport')->name('users.parseCsvImport');
+    Route::post('users/process-csv-import', 'UserController@processCsvImport')->name('users.processCsvImport');
+    Route::resource('employees', 'UserController');
+   // Route::match(['get', 'patch'], '/employees/user/edit','UserController@edit');
+    
+});
+
+Route::group(['prefix' => 'employee', 'as' => 'employee.', 'namespace' => 'Employee', 'middleware' => ['auth']], function () {
+    Route::get('/', 'HomeController@index')->name('home');
+});/**/
+/*
 Route::group(['prefix' => 'user', 'as' => 'user.', 'namespace' => 'User', 'middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
-});
+});*/

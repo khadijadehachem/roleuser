@@ -55,7 +55,21 @@ class LoginController extends Controller
 
     public function redirectPath()
     {
-        $user = auth()->user()->is_admin ? 'admin' : 'user';
+        if( auth()->user()->is_admin){
+            $user = 'admin';
+            
+        }
+        elseif( auth()->user()->is_manager){
+            $user = 'manager';
+            
+        }
+        elseif( auth()->user()->is_employee){
+            $user = 'employee';
+            
+        }/*
+
+
+        $user = auth()->user()->is_admin ? 'admin' : 'manager';*/
         return route($user . '.home');
     }
 }

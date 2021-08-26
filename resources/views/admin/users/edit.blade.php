@@ -56,6 +56,20 @@
                         {{ $errors->first('roles') }}
                     </div>
                 @endif
+                <span class="help-block">{{ company }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required" for="roles">{{ trans('cruds.user.fields.roles') }}</label>
+                <select class="form-control select2 {{ $errors->has('companies') ? 'is-invalid' : '' }}" name="company_id" id="companies" required>
+                    @foreach($companies as $id => $companies)
+                        <option value="{{ $id }}" {{ (in_array($id, old('companies', [])) || $user->company->name) ? 'selected' : '' }}>{{ $companies }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('companies'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('companies') }}
+                    </div>
+                @endif
                 <span class="help-block">{{ trans('cruds.user.fields.roles_helper') }}</span>
             </div>
             <div class="form-group">

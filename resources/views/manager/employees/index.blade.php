@@ -1,4 +1,4 @@
-@extends('templates.admin')
+@extends('templates.manager')
 @section('css')
     @include('templates.datatableCss')
 @endsection
@@ -7,13 +7,13 @@
     @can('user_create')
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-12">
-                <a class="btn btn-success" href="{{ route("admin.users.create") }}">
+                <a class="btn btn-success" href="{{ route("manager.employees.create") }}">
                     {{ trans('global.add') }} {{ trans('cruds.user.title_singular') }}
                 </a>
                 <button class="btn btn-warning" data-toggle="modal" data-target="#csvImportModal">
                     {{ trans('global.app_csvImport') }}
                 </button>
-                @include('csvImport.modal', ['model' => 'User', 'route' => 'admin.users.parseCsvImport'])
+                @include('csvImport.modal', ['model' => 'User', 'route' => 'manager.users.parseCsvImport'])
             </div>
         </div>
     @endcan
@@ -44,11 +44,15 @@
                                 {{ trans('cruds.user.fields.email_verified_at') }}
                             </th>
                             <th>
+                                category
+                            </th>
+                            <th>
                                 {{ trans('cruds.user.fields.roles') }}
                             </th>
                             <th>
-                                company
+                                plafond
                             </th>
+                          
                             <th>
                                 &nbsp;
                             </th>
@@ -73,18 +77,23 @@
                                     {{ $user->email_verified_at ?? '' }}
                                 </td>
                                 <td>
+                                    
+                                    <span class="badge badge-info">{{ $user->category->name ?? '' }}</span>
+                             
+                                </td>
+                                <td>
                                     @foreach($user->roles as $key => $item)
                                         <span class="badge badge-info">{{ $item->title }}</span>
                                     @endforeach
                                 </td>
                                 <td>
                                     
-                                        <span class="badge badge-info">{{ $user->company->name ?? '' }}</span>
-                                 
+                                    <span class="badge badge-info">{{ $user->plafond ?? '' }}</span>
+                             
                                 </td>
                                 <td>
                                     @can('user_show')
-                                        <a href="{{ route('admin.users.show', $user->id) }}"
+                                        <a href="{{ route('manager.employees.show', $user->id) }}"
                                            class="btn btn-icon btn-icon rounded-circle btn-flat-primary waves-effect waves-light">
                                             <span class="action-edit"><i class="feather icon-eye"></i></span>
                                         </a>
@@ -92,14 +101,14 @@
 
                                     @can('user_edit')
 
-                                        <a href="{{ route('admin.users.edit', $user->id) }}"
+                                        <a href="{{ route('manager.employees.edit', $user->id) }}"
                                            class="btn btn-icon btn-icon rounded-circle btn-flat-success waves-effect waves-light">
                                             <span class="action-edit"><i class="feather icon-edit"></i></span>
                                         </a>
                                     @endcan
 
                                     @can('user_delete')
-                                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST"
+                                        <form action="{{ route('manager.employees.destroy', $user->id) }}" method="POST"
                                               onsubmit="return confirm('{{ trans('global.areYouSure') }}');"
                                               style="display: inline-block;">
                                             <input type="hidden" name="_method" value="DELETE">

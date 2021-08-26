@@ -16,7 +16,7 @@
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
             <li class="{{ request()->is('admin') ? 'active' : '' }}">
-                <a href="{{ route("admin.home") }}">
+                <a href="{{ route("manager.home") }}">
                     <!--admin.home-->
                     <i class="feather icon-home"></i>
                     {{ trans('global.dashboard') }}
@@ -45,8 +45,8 @@
                             </li>
                         @endcan
                         @can('user_access')
-                            <li class=" {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
-                                <a href="{{ route("admin.users.index") }}">
+                            <li class=" {{ request()->is('manager/users') || request()->is('manager/users/*') ? 'active' : '' }}">
+                                <a href="{{ route("manager.employees.index") }}">
                                     <i class="feather icon-user"></i>
                                     {{ trans('cruds.user.title') }}
                                 </a>
@@ -65,16 +65,6 @@
              </li>
              @endcan
            <!-------------------------------------------------------------------------->
-           <!---------------------------companies------------------------------------------>
-           @can('company_access')
-           
-           <li class="nav-item {{ request()->is('admin/companies') || request()->is('admin/companies/*') ? 'active' : '' }}">
-             <a href="{{ route("admin.companies.index") }}"><i class="feather icon-users"></i><span
-                     class="menu-title">{{ trans('cruds.company.title') }}</span></a>
-           
-           </li>
-           @endcan
-         <!-------------------------------------------------------------------------->
 
             @can('basic_c_r_m_access')
                 <li class=" nav-item">

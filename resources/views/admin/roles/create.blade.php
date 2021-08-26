@@ -7,9 +7,9 @@
     </div>
 
     <div class="card-body">
-        <form method="POST" action="{{ route("roles.store") }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route("admin.roles.store") }}" enctype="multipart/form-data">
             @csrf
-            <!----admin.roles.store--->
+            <!----admin.roles.store---> 
             <div class="form-group">
                 <label class="required" for="title">{{ trans('cruds.role.fields.title') }}</label>
                 <input class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" type="text" name="title" id="title" value="{{ old('title', '') }}" required>
